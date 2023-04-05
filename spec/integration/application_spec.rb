@@ -11,12 +11,19 @@ describe Application do
   let(:app) { Application.new }
 
   context "POST /albums" do
-    it 'returns 200 OK' do
+    it 'should return a confirmation' do
       response = post('/albums', title: 'Voyage', release_year: 2022, artist_id: 2)
 
       repo = AlbumRepository.new
       expect(response.status).to eq(200)
+      expect(response.body).to include('<p>You created an album titled: Voyage</p>')
       expect(repo.all.last.title).to eq 'Voyage'
+    end
+
+    it 'returns status 400 when given incorrect parameters' do
+      response = post('/albums', wrong: 'Voyage', release_year: 2022, artist_id: 2)
+
+      expect(response.status).to eq 400
     end
   end
 
@@ -64,6 +71,16 @@ describe Application do
 
       expect(response.status).to eq 200
       expect(repo.all.last.name).to eq 'Wild Nothing'
+    end
+  end
+
+  context "GET /albums/new" do
+    it 'should return the html form to create a new album' do
+      response = get('/albums/new')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include '<form action="/albums" method="POST">'
+      expect(response.body).to include '<input type="number" name="release_year">'
     end
   end
 end
