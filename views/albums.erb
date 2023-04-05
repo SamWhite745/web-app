@@ -2,11 +2,12 @@
   <head></head>
   <body>
     <h1>Albums</h1>
-    <% @albums.each do |album|%>
-      <div>
-        Title: <%= album.title%>
-        Released: <%= album.release_year%>
-      </div>
-    <% end %>
+    <div>
+      <% @albums.each do |album|%>
+        <p>
+          <a href="/albums/<%= album.id%>"><%= album.title%></a>
+        </p>
+      <% end %>
+    </div>  
   </body>
 </html>

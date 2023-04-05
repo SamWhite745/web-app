@@ -21,11 +21,11 @@ describe Application do
   end
 
   context "GET /albums" do
-    it "returns a webpage showing all albums" do
+    it "returns a webpage showing all album titles with links to their page" do
       response = get('/albums')
-
-      expect(response.body).to include ('Title: Doolittle')
-      expect(response.body).to include ('Title: Surfer Rosa')
+      
+      expect(response.body).to include ('<a href="/albums/2">Surfer Rosa</a>')
+      expect(response.body).to include ('<a href="/albums/4">Super Trouper</a>')
     end
   end
 
@@ -35,16 +35,25 @@ describe Application do
 
       expect(response.body).to include('<h1>Surfer Rosa</h1>')
       expect(response.body).to include('Release year: 1988')
-      expect(response.body).to include('Artist: ABBA')
+      expect(response.body).to include('Artist: Pixies')
     end
   end
 
   context "GET /artists" do
-    it 'returns 200 OK and a list of artists' do
+    it 'returns 200 OK and a list of artists with links' do
       response = get('/artists')
 
-      # expect(response.status).to eq 200
-      expect(response.body).to eq 'Pixies, ABBA, Taylor Swift, Nina Simone, Kiasmos'
+      expect(response.body).to include('<a href="/artists/1">Pixies</a>')
+      expect(response.body).to include('<a href="/artists/3">Taylor Swift</a>')
+    end
+  end
+
+  context "GET /artists/:id" do
+    it "returns a page with the artists name and genre" do
+      response = get('/artists/1')
+
+      expect(response.body).to include('<h1>Pixies</h1>')
+      expect(response.body).to include('<p>Genre: Rock</p>')
     end
   end
 
